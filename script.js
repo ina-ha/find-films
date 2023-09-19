@@ -4,6 +4,8 @@ const key = 'c8dfca264756c42d5c2fc70dd168fba9';
 const baseUrl = 'https://api.themoviedb.org/3';
 
 const container = document.getElementById('films'); // Container to display the film results
+const checkbox = document.getElementById('top-rated'); // Checkbox for selecting top rated films only
+let filters = false; // No filters are displayed at first
 
 
 
@@ -29,7 +31,6 @@ const addGenres = async () => {
     const data = await fetchList(endpoint);
     const genres = data.genres;
     for (const genre of genres) {
-        
         const node = document.createElement('option');
         node.innerHTML = genre.name;
         node.value = genre.id;
@@ -44,14 +45,29 @@ const select = (inputfield) => {
     return result;
 }
 
+// Create endpoint when "top rated" checkbox is selected
+const addRating = () => {
+    if (checkbox.checked) {
+        checkbox.setAttribute('value', '&vote_average.gte=8')
+    }
+    else checkbox.setAttribute('value', '')
+
+}
+
 // Fetch films from the database
 const fetchFilms = async () => {
     const endpoint = '/discover/movie' + `?api_key=${key}`;
-    const genre = select('genres'); // by genre
-    const year = select('year'); // by year
-    const lang = select('languages'); // by language
-    const country = select('countries'); // by country
-    const url = baseUrl + endpoint + `&with_genres=${genre}` + `&primary_release_year=${year}` + `&with_original_language=${lang}` +`&with_origin_country=${country}`;
+    let parameters = '';
+    // checks if filters were added
+    if (filters) {
+        const genre = select('genres'); // by genre
+        const year = select('year'); // by year
+        const lang = select('languages'); // by language
+        const country = select('countries'); // by country
+        const rating = select('top-rated'); // by rating
+        parameters = `&with_genres=${genre}` + `&primary_release_year=${year}` + `&with_original_language=${lang}` +`&with_origin_country=${country}` + `${rating}`
+    }
+    const url = baseUrl + endpoint + parameters;
     try {
         const responseA = await fetch(url); // First api call to fetch the total number of available pages
         if (responseA.ok) {
@@ -83,7 +99,7 @@ const display = (films, index) => {
     let film = films[index];
     //Create title
     const node = document.createElement('h1');
-    node.innerHTML = film.title 
+    node.innerHTML = film.title;
     container.appendChild(node);
     //Create poster if any
     if (film.poster_path) {
@@ -138,6 +154,7 @@ const displayFilms = async () => {
 
 // Display additional filters
 const addFilters = () => {
+    filters = true;
     const elements = document.querySelectorAll('label');
     for (const element of elements) {
         element.removeAttribute('hidden');
@@ -195,3 +212,5 @@ buttonFind.addEventListener('click', displayFilms);
 
 const buttonAddFilters = document.getElementById('filters');
 buttonAddFilters.addEventListener('click', addFilters);
+
+checkbox.addEventListener('change', addRating);
