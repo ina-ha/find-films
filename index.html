@@ -20,18 +20,37 @@
 
     <!-- CSS files-->
     <link href="styles.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <!--Javascript files-->
     <script defer src="script.js"></script>
     </head>
 
 <body>
     <header>
-        <h1>Find a film to watch tonight</h1>
-        <label>Genre <select id="genres">
+        <div class="top-bar"><div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" >
+            <path fill="#ff9a62" d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+        <span >MOVIE<span style="color: #fff">FIND</span></span></div>
+        <nav>
+            <ul>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Credits</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="headline"><h1>Find a film to watch tonight</h1></div>
+    </header>
+    <main>
+        
+<div class="selection-bar">
+        <select id="genres">
+            <option value="" hidden>Choose genre</option>
             <option value="">Any</option>
-        </select> </label>
-        <button id="find">Go</button>
-        <button id="filters">Add filters</button>
+        </select>
+        <button id="find">Let's go</button>
+        <p id="filters">Add filters</p>
+</div>
         <label hidden>Year <input id='year' value="" type='number'></label>
         <label hidden>Language <select id="languages">
             <option value="">Any</option>
@@ -41,12 +60,6 @@
         </select></label>
         <label hidden>Top rated<input id="top-rated" value="" type="checkbox"></label>
         <div id="films"></div>
-        
-    </header>
-    <nav>
-
-    </nav>
-    <main>
 
     </main>
     <footer>
