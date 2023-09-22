@@ -42,7 +42,6 @@
     <div class="headline"><h1>Find a film to watch tonight</h1></div>
     </header>
     <main>
-        
 <div class="selection-bar">
         <select id="genres">
             <option value="" hidden>Choose genre</option>
@@ -50,15 +49,20 @@
         </select>
         <button id="find">Let's go</button>
         <p id="filters">Add filters</p>
+        <p id="hide-filters" style="display:none">Hide filters</p>
 </div>
-        <label hidden>Year <input id='year' value="" type='number'></label>
-        <label hidden>Language <select id="languages">
+<div id="filter-options" style="display: none">
+        <select id="languages">
+            <option value="" hidden>Language</option>
             <option value="">Any</option>
         </select> </label>
-        <label hidden>Country <select id='countries'>
+         <select id='countries'>
+            <option value="" hidden>Country</option>
             <option value="">Any</option>
-        </select></label>
-        <label hidden>Top rated<input id="top-rated" value="" type="checkbox"></label>
+        </select>
+        <label>Year <input id='year' value="" type='number'></label>
+        <label>Top rated<input id="top-rated" value="" type="checkbox"></label>
+    </div>
         <div id="films"></div>
 
     </main>

@@ -102,13 +102,10 @@ select {/* Dropdown */
     background-color:#0B0708;
     color: #fff;
     border: none;
-    padding: 15px;
     width: 300px;
-    font-size: 1.3rem;
-    font-family: 'Raleway', sans-serif;
     border-radius: 5px;
 }
-.selection-bar {
+.selection-bar, #filter-options {
     display: flex;
     row-gap: 40px;
     column-gap: 70px;
@@ -117,18 +114,99 @@ select {/* Dropdown */
     padding: 0 20px;
 
 }
+/* Styling filtering options */
+select, label {
+    font-size: 1.3rem;
+    font-family: 'Raleway', sans-serif;
+    padding: 15px;
+}
 
-#filters {
+#filters, #hide-filters {
     text-decoration: underline;
     align-self: center;
     cursor: pointer;
 }
-#filters:hover {
+#filters:hover, #hide-filters:hover {
     color: #ffffffd1;
 }
 
+#filter-options {
+    margin: 40px 0;
+    flex-wrap: wrap;
+    align-items: center;
+}
 
+/*Custom number input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none; 
+  margin: 0;
+}
+
+input[type=number] {
+-moz-appearance: textfield;
+  text-align: center;
+  border: none;
+  margin: 0;
+  width: 110px;
+  height: 1.5rem;
+  padding: 20px 20px;
+  background-color:#0B0708;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 1.3rem;
+  font-family: sans-serif;
+margin-left: 20px;
+}
+
+/* Custom checkbox */
+input[type=checkbox]:focus
+{
+    outline: 1px solid #fff;;
+}
+
+input[type=checkbox]
+{
+    background-color: #0B0708;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 30px;
+    height: 1.5rem;
+    appearance: none;
+    position: relative;
+    top: 5px;
+    margin-left: 20px;
+}
+
+input[type=checkbox]:checked
+{
+    background: #01759ced url('check.png') center;
+}
+
+
+/* Adjustments to screen sizes */
 @media screen and (min-width: 650px) {
     .selection-bar {
         margin-top: 70px;
 }}
+
+@media screen and (max-width: 480px) {
+    html {
+        font-size: 4vmin;
+    }
+
+    h1 {font-size: 1.5rem;}
+    input[type=number] {
+        width: 70px;
+        padding: 10px 10px;
+    }
+    input[type=checkbox] {
+        width: 20px;
+
+    }
+
+}

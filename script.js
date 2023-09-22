@@ -3,8 +3,13 @@
 const key = 'c8dfca264756c42d5c2fc70dd168fba9';
 const baseUrl = 'https://api.themoviedb.org/3';
 
-const container = document.getElementById('films'); // Container to display the film results
-const checkbox = document.getElementById('top-rated'); // Checkbox for selecting top rated films only
+// Selecting DOM elements
+const container = document.getElementById('films');
+const checkbox = document.getElementById('top-rated');
+const show = document.getElementById('filters');
+const hide = document.getElementById('hide-filters');
+const filterOptions = document.getElementById('filter-options');
+
 let filters = false; // No filters are displayed at first
 
 
@@ -13,14 +18,14 @@ let filters = false; // No filters are displayed at first
 // Fetch lists from the database. This will be used to fetch the lists of genres, languages, countries etc.
 const fetchList = async (endpoint) => {
     const url = baseUrl + endpoint + `?api_key=${key}`;
-   try {
-       const response = await fetch(url);
-       if (response.ok) {
-           const data = await response.json();
-           return data
-            }
-   }
-catch(error) {console.log(error)}
+    try {
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            return data
+        }
+    }
+    catch (error) { console.log(error) }
 }
 
 
@@ -56,7 +61,7 @@ const addRating = () => {
 
 // Fetch films from the database
 const fetchFilms = async () => {
-    const endpoint = '/discover/movie' + `?api_key=${key}`;
+    const endpoint = '/discover/movie' + `?api_key=${key}` + `&include_adult=false`;
     let parameters = '';
     // checks if filters were added
     if (filters) {
@@ -65,7 +70,7 @@ const fetchFilms = async () => {
         const lang = select('languages'); // by language
         const country = select('countries'); // by country
         const rating = select('top-rated'); // by rating
-        parameters = `&with_genres=${genre}` + `&primary_release_year=${year}` + `&with_original_language=${lang}` +`&with_origin_country=${country}` + `${rating}`
+        parameters = `&with_genres=${genre}` + `&primary_release_year=${year}` + `&with_original_language=${lang}` + `&with_origin_country=${country}` + `${rating}`
     }
     const url = baseUrl + endpoint + parameters;
     try {
@@ -83,16 +88,16 @@ const fetchFilms = async () => {
                         const films = jsonB.results;
                         return films
                     }
-            }
-            catch(error) {console.log(error)}
+                }
+                catch (error) { console.log(error) }
             }
             //Display alert if there are no films
-            else {alert('There are no films in this category. Please change the filtering options')}
+            else { alert('There are no films in this category. Please change the filtering options') }
 
         }
     }
     catch (error) { console.log(error) }
-    }
+}
 
 // Create HTML elements for films
 const display = (films, index) => {
@@ -119,16 +124,16 @@ const display = (films, index) => {
 
 // Pick and display three random films
 const displayFilms = async () => {
-    
+
     // Remove previous results
     container.innerHTML = '';
 
     // Fetch films
     const films = await fetchFilms();
 
-   // Chose three random films if there are more than three films available
+    // Chose three random films if there are more than three films available
     if (films.length > 3) {
-         // Create three random non-repeating indices
+        // Create three random non-repeating indices
         let index1 = Math.floor(Math.random() * films.length);
         let index2;
         do { index2 = Math.floor(Math.random() * films.length); }
@@ -138,36 +143,45 @@ const displayFilms = async () => {
         while (index3 === index1 || index3 === index2);
         const array = new Array(index1, index2, index3);
 
-    // Create html elements
-    for (const index of array) {
-        display(films, index);
-    }
+        // Create html elements
+        for (const index of array) {
+            display(films, index);
+        }
 
     }
     // If there are <= three films then display them all
-       else {
+    else {
         for (let index = 0; index < films.length; index++) {
             display(films, index);
         }
-       }
+    }
 }
 
 // Display additional filters
 const addFilters = () => {
     filters = true;
-    const elements = document.querySelectorAll('label');
-    for (const element of elements) {
-        element.removeAttribute('hidden');
-    }
+    filterOptions.style.display = 'flex';
+    show.style.display = 'none';
+    hide.style.display = 'block';
+
     addLanguages();
     addCountries();
+}
+
+const hideFilters = () => {
+    filters = false;
+    filterOptions.style.display = 'none';
+    hide.style.display = 'none';
+    show.style.display = 'block';
+    checkbox.setAttribute('value', '');
+
 }
 
 //Alphabetical sort for a dropdown. This will be used for the lists of languages and counties
 const sort = (data) => {
     data.sort((a, b) => {
-        if (a.english_name <  b.english_name) {return -1}
-        if (a.english_name >  b.english_name) {return 1}
+        if (a.english_name < b.english_name) { return -1 }
+        if (a.english_name > b.english_name) { return 1 }
         return 0
     });
     return data
@@ -210,7 +224,7 @@ const buttonFind = document.getElementById('find');
 buttonFind.addEventListener('click', displayFilms);
 
 
-const buttonAddFilters = document.getElementById('filters');
-buttonAddFilters.addEventListener('click', addFilters);
+show.addEventListener('click', addFilters);
+hide.addEventListener('click', hideFilters);
 
 checkbox.addEventListener('change', addRating);
