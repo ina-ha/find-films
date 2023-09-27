@@ -12,9 +12,6 @@ const filterOptions = document.getElementById('filter-options');
 
 let filters = false; // No filters are displayed at first
 
-
-
-
 // Fetch lists from the database. This will be used to fetch the lists of genres, languages, countries etc.
 const fetchList = async (endpoint) => {
     const url = baseUrl + endpoint + `?api_key=${key}`;
@@ -40,7 +37,7 @@ const addGenres = async () => {
         node.innerHTML = genre.name;
         node.value = genre.id;
         select.appendChild(node);
-    }
+         }
 }
 
 // Read user input. This will be used to select genre, year, language and other options
@@ -49,6 +46,7 @@ const select = (inputfield) => {
     const result = document.getElementById(`${inputfield}`).value
     return result;
 }
+
 
 // Create endpoint when "top rated" checkbox is selected
 const addRating = () => {
@@ -61,16 +59,16 @@ const addRating = () => {
 
 // Fetch films from the database
 const fetchFilms = async () => {
-    const endpoint = '/discover/movie' + `?api_key=${key}` + `&include_adult=false`;
+    const genre = select('genres'); // by genre
+    const endpoint = '/discover/movie?include_adult=false' + `&api_key=${key}` + `&with_genres=${genre}`;
     let parameters = '';
-    // checks if filters were added
+     // checks if filters were added
     if (filters) {
-        const genre = select('genres'); // by genre
         const year = select('year'); // by year
         const lang = select('languages'); // by language
         const country = select('countries'); // by country
         const rating = select('top-rated'); // by rating
-        parameters = `&with_genres=${genre}` + `&primary_release_year=${year}` + `&with_original_language=${lang}` + `&with_origin_country=${country}` + `${rating}`
+        parameters = `&primary_release_year=${year}` + `&with_original_language=${lang}` + `&with_origin_country=${country}` + `${rating}`
     }
     const url = baseUrl + endpoint + parameters;
     try {
@@ -99,25 +97,76 @@ const fetchFilms = async () => {
     catch (error) { console.log(error) }
 }
 
+
+//Display names of the genres
+const genre_ids = [
+    28, 12, 16, 35,
+    80, 99, 18, 10751,
+    14, 36, 27, 10402,
+    9648, 10749, 878, 10770,
+    53, 10752, 37
+];
+
+const genre_names = [
+    'Action', 'Adventure',
+    'Animation', 'Comedy',
+    'Crime', 'Documentary',
+    'Drama', 'Family',
+    'Fantasy', 'History',
+    'Horror', 'Music',
+    'Mystery', 'Romance',
+    'Science Fiction', 'TV Movie',
+    'Thriller', 'War',
+    'Western'
+]
+
+const filmGenres = (film, div) => {
+    const film_genre_ids = film.genre_ids;
+    let genres = '';
+    for (id of film_genre_ids) {
+        const index = genre_ids.indexOf(id);
+        genres += genre_names[index] + "&#32";
+    }
+    const name = document.createElement('p');
+        name.className = 'genre-name';
+        name.innerHTML = genres;
+        div.appendChild(name);
+}
+
+
 // Create HTML elements for films
 const display = (films, index) => {
     let film = films[index];
-    //Create title
-    const node = document.createElement('h1');
-    node.innerHTML = film.title;
-    container.appendChild(node);
+    //Create card
+    const div = document.createElement('div');
+    div.className = 'film';
+    container.appendChild(div);
     //Create poster if any
     if (film.poster_path) {
         const image = document.createElement('img');
         image.src = `https://image.tmdb.org/t/p/original/${film.poster_path}`
-        image.setAttribute("width", '200px');
+        image.setAttribute("width", '300px');
+        image.setAttribute("height", '450px');
         image.setAttribute('alt', `${film.title} poster`)
-        container.appendChild(image);
+        div.appendChild(image);
     }
+    //Create title
+    const node = document.createElement('h1');
+    node.innerHTML = film.title;
+    div.appendChild(node);
+    // Create year of release and rating
+    const data = document.createElement('p');
+    data.className = 'film-data';
+    data.innerHTML = `${film.release_date.slice(0, 4)}` + "&nbsp" + "&nbsp" + "&nbsp" + "&nbsp" + "☆" + "&nbsp" + `${film.vote_average}`;
+    div.appendChild(data);
+      //Create genre names
+    filmGenres(film, div);
+
     //Create description
     const description = document.createElement('p');
     description.innerHTML = film.overview;
-    container.appendChild(description);
+    div.appendChild(description);
+    
 }
 
 
@@ -155,6 +204,9 @@ const displayFilms = async () => {
             display(films, index);
         }
     }
+    //Scroll into view
+    //document.getElementById('films').scrollIntoView();
+
 }
 
 // Display additional filters
