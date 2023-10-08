@@ -229,6 +229,18 @@ input[type=checkbox]:checked {
     margin-bottom: 1rem;
 }
 
+/* About page */
+.about {
+    max-width: 650px;
+    background-color: #0b07086a;
+    padding: 25px;
+    margin: 150px auto;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    text-align: left;
+}
+
+
 /* Adjustments to screen sizes */
 @media screen and (min-width: 650px) {
     .selection-bar {
