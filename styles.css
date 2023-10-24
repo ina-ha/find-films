@@ -157,6 +157,7 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+    appearance: none;
     text-align: center;
     border: none;
     margin: 0;
@@ -247,6 +248,7 @@ input[type=checkbox]:checked {
 .about a {
     text-decoration: underline;
 }
+
 /* Adjustments to screen sizes */
 @media screen and (min-width: 650px) {
     .selection-bar {
