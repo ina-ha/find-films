@@ -240,7 +240,13 @@ input[type=checkbox]:checked {
     text-align: left;
 }
 
+.about p {
+    padding: 10px;
+}
 
+.about a {
+    text-decoration: underline;
+}
 /* Adjustments to screen sizes */
 @media screen and (min-width: 650px) {
     .selection-bar {
